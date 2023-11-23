@@ -36,7 +36,6 @@ public:
         x = y;
         y = temp;
     }
-
     void selectionSortWithName(Emp data[], int size)
     {
         int i, j, index = 0;
@@ -59,7 +58,7 @@ public:
             for (j = i + 1; j < size; j++) // Number of comparisons
                 if (data[index].age > data[j].age)
                     index = j;
-            swapInt(data[i].age, data[index].age);
+            swapInt(data[i], data[index]);
         }
     }
 };
@@ -69,7 +68,7 @@ void displayAllEmp(Emp *empArr, int numberOfEmp)
     cout << endl;
     for (int i = 0; i < numberOfEmp; i++)
     {
-		cout << "Emp number : " << i + 1 << " [ Name : " << empArr[i].name << " ] - age : " << empArr[i].age << endl<<endl;
+        cout << "Emp number : " << i + 1 << " [ Name : " << empArr[i].name << " ] - age : " << empArr[i].age << endl;
     }
 }
 
