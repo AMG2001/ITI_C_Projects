@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<conio.h>
+
+void main(){
+int i,j;
+int cindex=1;
+
+
+	clrscr();
+	// Print Upper Header .
+	for(i=1;i<=10;i++){
+		gotoxy(i*5+10,5);
+		printf("%d",i);
+		gotoxy(i*5+10,6);
+		printf("*");
+	}
+	// print left Header .
+	for(i=1;i<=10;i++){
+	gotoxy(10,i*2+5);
+    printf("%d *",i);
+	}
+	// loop to print values inside the table .
+	for(i=1;i<=10;i++){
+		for(j=1;j<=10;j++){
+			gotoxy(i*5+10,j*2+5);
+            printf("%d",i*j);
+
+		}
+	}
+	getch();
+}

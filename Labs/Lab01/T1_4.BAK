@@ -1,0 +1,19 @@
+#include<stdio.h>
+#include<conio.h>
+
+void main(){
+int number;
+
+
+
+clrscr();
+printf("Enter the number : ");
+scanf("%d",number);
+printf("Number in Octal : %o \n",number);
+printf("Number in Hexa : %X \n",number);
+
+getch();
+
+
+
+}

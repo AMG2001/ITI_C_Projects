@@ -1,0 +1,44 @@
+#include<stdio.h>
+#include<windows.h>
+#include<conio.h>
+
+void gotoxy(int x, int y) {
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+int main(){
+
+	int i=0,j=0,nx=0,ny=0;
+
+	int arr[3][3] = {0};
+	arr[0][1]=1;
+
+	for(i=2;i<=3*3;i++){
+		if(i%3!=0){
+			nx=(nx==0)?2:nx-1;
+			ny=(ny==0)?2:ny-1;
+			arr[nx][ny]=i;
+		}else{
+			nx=(nx+1)%3;
+			arr[nx][ny]=i;
+		}
+	}
+
+	// Display the Magic Box
+
+	for(i=0; i<3; i++) {
+
+		for(j=0; j<3; j++) {
+			gotoxy(j*4, i);
+			printf("%d", arr[i][j]);
+
+		}
+
+		printf("\n");
+	}
+
+	return 0;
+}

@@ -1,0 +1,16 @@
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+
+
+
+
+void swapByAdderss(int *num1,int *num2){
+    int temp = *num1;
+    *num1=*num2;
+    *num2=temp;
+}
+void main(){
+int x = 5 , y = 10;
+swapByAdderss(x,y);
+}

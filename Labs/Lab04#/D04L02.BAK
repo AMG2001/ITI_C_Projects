@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+void readArray(int arr[], int size) {
+	int i=0;
+	printf("Enter %d ch : ", size);
+	for (i = 0; i < size; i++) {
+		scanf(" %c", &arr[i]);
+	}
+}
+
+void printArray(int arr[], int size) {
+	int i=0;
+	printf("sentence elements : ");
+
+	for (i = 0; i < size; i++) {
+		printf("%c ", arr[i]);
+	}
+	printf("\n");
+}
+
+void main(void) {
+	int size;
+	int* arr;
+	clrscr();
+	printf("Enter the length of the sentence: ");
+	scanf("%d", &size);
+
+	arr = (int*)malloc(size * sizeof(int));
+
+	readArray(arr, size);
+	printArray(arr, size);
+
+	free(arr);
+
+    getch();
+}
+

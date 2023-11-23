@@ -1,0 +1,137 @@
+#include <iostream.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+
+class Stack
+{
+private:
+    int top;
+    int size;
+    int *ptr;
+    static int counter;
+
+public:
+    int isFull();
+    int isEmpty();
+    int push(int n);
+    int pop(int &n);
+    
+    static int getCounter()
+    {
+        return counter;
+    }
+
+    Stack()
+    {
+        top = 0;
+        size = 10;
+        ptr = new int[size];
+        counter++;
+        cout << "\n This is the default constructor" << endl;
+    }
+
+    Stack(int n)
+    {
+        top = 0;
+        size = n;
+        ptr = new int[size];
+        counter++;
+    }
+
+    ~Stack()
+    {
+        delete[] ptr;
+        size = 0;
+        counter--;
+        cout << "\nThis is destructor" << endl;
+    }
+
+    friend void viewContent(Stack s);
+    
+    Stack(Stack & s)
+    {
+        top = s.top;
+        size = s.size;
+        ptr = new int[size];
+        for (int i = 0; i < top; i++)
+        {
+            ptr[i] = s.ptr[i];
+        }
+    }
+};
+
+int Stack::isFull()
+{
+    return top == size;
+}
+
+int Stack::isEmpty()
+{
+    return top == 0;
+}
+int Stack::push(int n)
+{
+    if (isFull())
+        return 0;
+    ptr[top] = n;
+    top++;
+    return 1;
+}
+
+int Stack::counter = 0;
+
+int Stack::pop(int &n)
+{
+    if (isEmpty())
+        return 0;
+    top--;
+    n = ptr[top];
+    return 1;
+}
+
+void viewContent(Stack &s)
+{
+    for (int i = 0; i < s.top; i++)
+        cout << "\nElement no {" << i + 1 << ") = " << s.ptr[i] << endl;
+}
+
+
+void pushNumber(Stack &s)
+{
+    int temp;
+    cout << "Enter the number : ";
+    cin >> temp;
+    s.push(temp);
+}
+
+int popNumber(Stack &s)
+{
+	if (s.isEmpty())
+        cout << "\n Stack is Empty";
+    else
+        cout << "Poped Number : "<<s.pop();
+}
+int main()
+{
+    int num;
+    char character='a';
+    clrscr();
+    cout << "The number of objects created = " << Stack::getCounter() << endl;
+    Stack s1, s2(5);
+    cout << "The number of objects created = " << Stack::getCounter() << endl;
+    {
+        Stack s3(5);
+        cout << "The number of objects created = " << Stack::getCounter() << endl;
+    }
+    cout << "The number of objects created = " << Stack::getCounter() << endl;
+    while(character!='e'){
+        cout<<"Want to push [p] , pop [o] ? " ;
+        cin>>character;
+        if(character=='p') pushNumber();
+        else if(character=='o') popNumber();
+    }
+    viewContent(s1);
+    getch();
+    return 0;
+}
