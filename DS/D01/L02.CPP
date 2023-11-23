@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
-#include<iostream.h>
+#include <iostream.h>
+
 // Define some Colors :
 #define BLACK 0
 #define WHITE 15
@@ -13,20 +14,20 @@
 #define KEY_ENTER 13
 #define ESC 27
 
-typedef struct Employee
+int selectedOption = 1, enteredEmp = 0, totalEnteredEmp = 0, sizeOfEmpArray;
+
+class Employee
 {
+public:
     int id;
     char name[20];
     int salary;
     int bouns;
     int deduct;
-    
-} Employee;
+    Employee() {}
+};
 
-struct Employee *empListPTR;
-
-int selectedOption = 1, enteredEmp = 0, totalEnteredEmp = 0, numberOfEmp;
-
+Employee *emp = new Employee[1];
 // this function rule is only draw the boundaries of the menu.
 void drawCustomFrame(int rows_number, int cols_number)
 {
@@ -137,13 +138,13 @@ void showMenu()
 /**
  * *************** Function that show insert fields as :
  * 1. Name
- * 2. id 
+ * 2. id
  * 3. salary .....
  */
 void showInsertFields()
 {
     int index = 0;
-    if (enteredEmp < numberOfEmp)
+    if (enteredEmp < sizeOfEmpArray)
     {
         drawCustomFrame(12, 30);
         gotoxy(28, 5);
@@ -173,19 +174,19 @@ void showInsertFields()
 
         index = 0;
         gotoxy(45, 7 + index * 2);
-        scanf(" %[^\n]s", empListPTR[enteredEmp].name);
+        scanf(" %[^\n]s", emp[enteredEmp].name);
         index++;
         gotoxy(45, 7 + index * 2);
-        scanf(" %d", &empListPTR[enteredEmp].id);
+        cin >> emp[enteredEmp].id;
         index++;
         gotoxy(45, 7 + index * 2);
-        scanf(" %d", &empListPTR[enteredEmp].salary);
+        cin >> emp[enteredEmp].salary;
         index++;
         gotoxy(45, 7 + index * 2);
-        scanf(" %d", &empListPTR[enteredEmp].bouns);
+        cin >> emp[enteredEmp].bouns;
         index++;
         gotoxy(45, 7 + index * 2);
-        scanf(" %d", &empListPTR[enteredEmp].deduct);
+        cin >> emp[enteredEmp].deduct;
         enteredEmp++;
         index = 0;
         clrscr();
@@ -193,6 +194,7 @@ void showInsertFields()
     }
     showMenu();
 }
+
 /**
  * Just to show Frame and Insert Field
  */
@@ -241,18 +243,20 @@ void showDeleteWithNamePage()
     cout << "enter the name you want to delete : ";
     cin >> name;
     cout << endl;
-    for (int i = 0; i < numberOfEmp; i++)
+    for (int i = 0; i < sizeOfEmpArray; i++)
     {
-        if (strcmp(name, empListPTR[i].name) == 0)
+        if (strcmp(name, emp[i].name) == 0)
         {
             isFound = 1;
-            for(int j = i;j<=numberOfEmp-1;j++){
-                empListPTR[j]=empListPTR[j+1];
+            for (int j = i; j <= sizeOfEmpArray - 1; j++)
+            {
+                emp[j] = emp[j + 1];
             }
-            cout<<"Name Deleted Successfully #";
+            cout << "Name Deleted Successfully #";
             // decrement number of emp in system .
             totalEnteredEmp--;
-            enteredEmp--;
+			enteredEmp = totalEnteredEmp;
+
             getch();
             break;
         }
@@ -271,22 +275,22 @@ void showDeletePage()
     clrscr();
     gotoxy(15, 12);
     cout << "want to delete with name {n} or id {i} ? ";
-    cin>>c;
+    cin >> c;
     if (c == 'n' || c == 'N')
     {
         showDeleteWithNamePage();
     }
-	else if (c == 'i' || c == 'I')
+    else if (c == 'i' || c == 'I')
     {
         gotoxy(15, 14);
-        cout<<"user want to delete with id #";
+        cout << "user want to delete with id #";
         getch();
     }
     else
     {
         clrscr();
         gotoxy(15, 12);
-        cout<<"Invalid character !!  , press any button to start again ->";
+        cout << "Invalid character !!  , press any button to start again ->";
         getch();
         showDeletePage();
     }
@@ -294,7 +298,6 @@ void showDeletePage()
 
 void showDeleteWithIdPage()
 {
-
 }
 
 /**
@@ -312,15 +315,15 @@ void showDisplayPanel()
             gotoxy(28, y);
             printf("EMP Number %d", i + 1);
             gotoxy(28, y + 2);
-            printf("Enter emp Name : %s", empListPTR[i].name);
+            printf("Enter emp Name : %s", emp[i].name);
             gotoxy(28, y + 4);
-            printf("Enter emp ID : %d", empListPTR[i].id);
+            printf("Enter emp ID : %d", emp[i].id);
             gotoxy(28, y + 6);
-            printf("Emp Salary : %d", empListPTR[i].salary);
+            printf("Emp Salary : %d", emp[i].salary);
             gotoxy(28, y + 8);
-            printf("Emp Bouns : %d", empListPTR[i].bouns);
+            printf("Emp Bouns : %d", emp[i].bouns);
             gotoxy(28, y + 10);
-            printf("Emp Deduct : %d", empListPTR[i].deduct);
+            printf("Emp Deduct : %d", emp[i].deduct);
             getch();
             clrscr();
         }
@@ -372,7 +375,7 @@ void handleUserInputInMenu()
         }
         else if (selectedOption == 5)
         {
-            free(empListPTR);
+            free(emp);
             exit(0);
         }
         break;
@@ -388,9 +391,9 @@ void main()
     int app_running = 1;
     clrscr();
     // ask for the size of emp array you want to allocate .
-    printf("Before starting the program , enter the number of the EMP's : ");
-    scanf("%d", &numberOfEmp);
-    empListPTR = (struct Employee *)malloc(numberOfEmp * sizeof(struct Employee));
+    cout << "Before starting the program , enter the number of the EMP's : ";
+    cin >> sizeOfEmpArray;
+    emp = new Employee[sizeOfEmpArray];
     while (app_running)
     {
         showMenu();

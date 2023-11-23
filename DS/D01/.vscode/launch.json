@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/BORLANDC/DS/D01",
-      "program": "c:/BORLANDC/DS/D01/build/Debug/outDebug",
+      "cwd": "c:/BORLANDC/ITI_C_Projects/DS/D01",
+      "program": "c:/BORLANDC/ITI_C_Projects/DS/D01/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
