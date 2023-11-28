@@ -27,7 +27,106 @@ public:
     Employee() {}
 };
 
-Employee *empArray = new Employee[1];
+class Node
+{
+public:
+    Employee data;
+    Node *prev;
+    Node *next;
+
+    Node()
+    {
+        prev = next = NULL;
+    }
+};
+
+class LinkedList
+{
+public:
+    Node *start;
+    Node *end;
+    int size;
+
+    LinkedList()
+    {
+        start = end = NULL;
+        size = 0;
+    }
+
+    // Other methods remain unchanged
+
+    void appendNode(Node *ele)
+    {
+        if (start == NULL) // Case 1: Empty List
+        {
+            // this is the first node in LL.
+            start = end = ele;
+        }
+        else // Case 2: General Case
+        {
+            ele->prev = end; // 1
+            end->next = ele; // 2
+            end = ele;       // 3
+        }
+        size++;
+    }
+
+    void insert(Node *ele)
+    {
+        Node *temp = start;
+        while (temp && (temp->data.id < ele->data.id))
+            temp = temp->next;
+
+        // Other cases remain unchanged
+
+        size++;
+    }
+
+    // Other methods remain unchanged
+
+    Node *getFirst()
+    {
+        if (isEmpty())
+            return NULL;
+        Node *temp = start;
+        start = start->next;
+        if (start)
+            start->prev = NULL;
+        else
+            end = NULL;
+        temp->prev = temp->next = NULL;
+        size--;
+        return temp;
+    }
+
+    Node *getLast()
+    {
+        if (isEmpty())
+            return NULL;
+        Node *temp = end;
+        end = end->prev;
+        if (end)
+            end->next = NULL;
+        else
+            start = NULL;
+        temp->prev = temp->next = NULL;
+        size--;
+        return temp;
+    }
+    // Return the first Node without remove it
+    Node *peekLast()
+    {
+        if (isEmpty())
+            return NULL;
+        Node *temp = new Node();
+        temp->data = end->data;
+        temp->prev = temp->next = NULL;
+        return temp;
+    };
+    // Return the last Node without remove it
+};
+
+LinkedList *empLL;
 // this function rule is only draw the boundaries of the menu.
 void drawCustomFrame(int rows_number, int cols_number)
 {
@@ -144,54 +243,50 @@ void showMenu()
 void showInsertFields()
 {
     int index = 0;
-    if (enteredEmp < sizeOfEmpArray)
+    drawCustomFrame(12, 30);
+    gotoxy(28, 5);
+    printf("Enter emp nom.%d", enteredEmp + 1);
+    for (index = 0; index <= 4; index++)
     {
-        drawCustomFrame(12, 30);
-        gotoxy(28, 5);
-        printf("Enter emp nom.%d", enteredEmp+1);
-        for (index = 0; index <= 4; index++)
+        gotoxy(28, 7 + index * 2);
+        switch (index)
         {
-            gotoxy(28, 7 + index * 2);
-            switch (index)
-            {
-            case 0:
-                printf("Enter emp Name :");
-                break;
-            case 1:
-                printf("Enter emp ID :");
-                break;
-            case 2:
-                printf("Emp Salary :");
-                break;
-            case 3:
-                printf("Emp Bouns :");
-                break;
-            case 4:
-                printf("Emp Deduct :");
-                break;
-            }
+        case 0:
+            printf("Enter emp Name :");
+            break;
+        case 1:
+            printf("Enter emp ID :");
+            break;
+        case 2:
+            printf("Emp Salary :");
+            break;
+        case 3:
+            printf("Emp Bouns :");
+            break;
+        case 4:
+            printf("Emp Deduct :");
+            break;
         }
-
-        index = 0;
-        gotoxy(45, 7 + index * 2);
-        scanf(" %[^\n]s", empArray[enteredEmp].name);
-        index++;
-        gotoxy(45, 7 + index * 2);
-        cin >> empArray[enteredEmp].id;
-        index++;
-        gotoxy(45, 7 + index * 2);
-        cin >> empArray[enteredEmp].salary;
-        index++;
-        gotoxy(45, 7 + index * 2);
-        cin >> empArray[enteredEmp].bouns;
-        index++;
-        gotoxy(45, 7 + index * 2);
-        cin >> empArray[enteredEmp].deduct;
-        enteredEmp++;
-        index = 0;
-        clrscr();
-        totalEnteredEmp++;
     }
+    index = 0;
+    gotoxy(45, 7 + index * 2);
+    scanf(" %[^\n]s", empArray[enteredEmp].name);
+    index++;
+    gotoxy(45, 7 + index * 2);
+    cin >> empArray[enteredEmp].id;
+    index++;
+    gotoxy(45, 7 + index * 2);
+    cin >> empArray[enteredEmp].salary;
+    index++;
+    gotoxy(45, 7 + index * 2);
+    cin >> empArray[enteredEmp].bouns;
+    index++;
+    gotoxy(45, 7 + index * 2);
+    cin >> empArray[enteredEmp].deduct;
+    enteredEmp++;
+    index = 0;
+    clrscr();
+    totalEnteredEmp++;
     showMenu();
 }
 
@@ -219,54 +314,54 @@ void showSearchPage()
         cin >> name;
         for (int i = 0; i < enteredEmp; i++)
         {
-            if (strcmp(empArray[i].name,name)==0)
+            if (strcmp(empArray[i].name, name) == 0)
             {
-				cout << "Name is Found #"<<endl;
-				cout << "Name is : " << empArray[i].name<<endl;
-				cout << "ID is : " << empArray[i].id<<endl;
-				cout << "Salary is : " << empArray[i].salary<<endl;
-				found = 1;
-				break;
-			}
-		}
-		if (!found)
-		{
-			cout << "Sorry but the name is Not Found !!";
-		}
-		getch();
-	}
-	else if (c == 'i')
-	{
-		int id;
-		int found = 0;
-		clrscr();
-		cout << "Enter ID of Emp you are looking for : ";
-		cin >> id;
-		for (int i = 0; i < enteredEmp; i++)
-		{
-			if (empArray[i].id == id)
-			{
-				cout << "ID is Found #"<<endl;
-				cout << "Name is : " << empArray[i].name<<endl;
-				cout << "ID is : " << empArray[i].id<<endl;
-				cout << "Salary is : " << empArray[i].salary<<endl;
-				found = 1;
-				break;
-			}
-		}
-		if (!found)
-		{
-			cout << "Sorry but the name is Not Found !!";
-		}
-		getch();
-	}
-	else
-	{
-		gotoxy(15, 14);
-		printf("Invalid character !!  , press to start again ->");
-		getch();
-		showSearchPage();
-	}
+                cout << "Name is Found #" << endl;
+                cout << "Name is : " << empArray[i].name << endl;
+                cout << "ID is : " << empArray[i].id << endl;
+                cout << "Salary is : " << empArray[i].salary << endl;
+                found = 1;
+                break;
+            }
+        }
+        if (!found)
+        {
+            cout << "Sorry but the name is Not Found !!";
+        }
+        getch();
+    }
+    else if (c == 'i')
+    {
+        int id;
+        int found = 0;
+        clrscr();
+        cout << "Enter ID of Emp you are looking for : ";
+        cin >> id;
+        for (int i = 0; i < enteredEmp; i++)
+        {
+            if (empArray[i].id == id)
+            {
+                cout << "ID is Found #" << endl;
+                cout << "Name is : " << empArray[i].name << endl;
+                cout << "ID is : " << empArray[i].id << endl;
+                cout << "Salary is : " << empArray[i].salary << endl;
+                found = 1;
+                break;
+            }
+        }
+        if (!found)
+        {
+            cout << "Sorry but the name is Not Found !!";
+        }
+        getch();
+    }
+    else
+    {
+        gotoxy(15, 14);
+        printf("Invalid character !!  , press to start again ->");
+        getch();
+        showSearchPage();
+    }
 }
 
 /**

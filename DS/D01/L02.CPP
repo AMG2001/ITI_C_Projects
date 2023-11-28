@@ -27,7 +27,7 @@ public:
     Employee() {}
 };
 
-Employee *emp = new Employee[1];
+Employee *empArray = new Employee[1];
 // this function rule is only draw the boundaries of the menu.
 void drawCustomFrame(int rows_number, int cols_number)
 {
@@ -148,7 +148,7 @@ void showInsertFields()
     {
         drawCustomFrame(12, 30);
         gotoxy(28, 5);
-        printf("Enter emp nom.%d", enteredEmp);
+        printf("Enter emp nom.%d", enteredEmp+1);
         for (index = 0; index <= 4; index++)
         {
             gotoxy(28, 7 + index * 2);
@@ -174,19 +174,19 @@ void showInsertFields()
 
         index = 0;
         gotoxy(45, 7 + index * 2);
-        scanf(" %[^\n]s", emp[enteredEmp].name);
+        scanf(" %[^\n]s", empArray[enteredEmp].name);
         index++;
         gotoxy(45, 7 + index * 2);
-        cin >> emp[enteredEmp].id;
+        cin >> empArray[enteredEmp].id;
         index++;
         gotoxy(45, 7 + index * 2);
-        cin >> emp[enteredEmp].salary;
+        cin >> empArray[enteredEmp].salary;
         index++;
         gotoxy(45, 7 + index * 2);
-        cin >> emp[enteredEmp].bouns;
+        cin >> empArray[enteredEmp].bouns;
         index++;
         gotoxy(45, 7 + index * 2);
-        cin >> emp[enteredEmp].deduct;
+        cin >> empArray[enteredEmp].deduct;
         enteredEmp++;
         index = 0;
         clrscr();
@@ -206,29 +206,67 @@ void showInsertPanel()
 
 void showSearchPage()
 {
-    char c;
+    char c, name[20];
     clrscr();
     gotoxy(15, 12);
-    printf("want to search with name {n} or id {i} ? ");
-    gotoxy(40, 12);
-    scanf("%c", &c);
+    cout << "want to search with name {n} or id {i} ? ";
+    cin >> c;
     if (c == 'n')
     {
-        getch();
-    }
-    else if (c == 'i')
-    {
-        getch();
-        gotoxy(15, 14);
-        printf("user want to search with id #");
-    }
-    else
-    {
-        gotoxy(15, 14);
-        printf("Invalid character !!  , press to start again ->");
-        getch();
-        showSearchPage();
-    }
+        int found = 0;
+        clrscr();
+        cout << "Enter Name of Emp you are looking for : ";
+        cin >> name;
+        for (int i = 0; i < enteredEmp; i++)
+        {
+            if (strcmp(empArray[i].name,name)==0)
+            {
+				cout << "Name is Found #"<<endl;
+				cout << "Name is : " << empArray[i].name<<endl;
+				cout << "ID is : " << empArray[i].id<<endl;
+				cout << "Salary is : " << empArray[i].salary<<endl;
+				found = 1;
+				break;
+			}
+		}
+		if (!found)
+		{
+			cout << "Sorry but the name is Not Found !!";
+		}
+		getch();
+	}
+	else if (c == 'i')
+	{
+		int id;
+		int found = 0;
+		clrscr();
+		cout << "Enter ID of Emp you are looking for : ";
+		cin >> id;
+		for (int i = 0; i < enteredEmp; i++)
+		{
+			if (empArray[i].id == id)
+			{
+				cout << "ID is Found #"<<endl;
+				cout << "Name is : " << empArray[i].name<<endl;
+				cout << "ID is : " << empArray[i].id<<endl;
+				cout << "Salary is : " << empArray[i].salary<<endl;
+				found = 1;
+				break;
+			}
+		}
+		if (!found)
+		{
+			cout << "Sorry but the name is Not Found !!";
+		}
+		getch();
+	}
+	else
+	{
+		gotoxy(15, 14);
+		printf("Invalid character !!  , press to start again ->");
+		getch();
+		showSearchPage();
+	}
 }
 
 /**
@@ -245,18 +283,51 @@ void showDeleteWithNamePage()
     cout << endl;
     for (int i = 0; i < sizeOfEmpArray; i++)
     {
-        if (strcmp(name, emp[i].name) == 0)
+        if (strcmp(name, empArray[i].name) == 0)
         {
             isFound = 1;
             for (int j = i; j <= sizeOfEmpArray - 1; j++)
             {
-                emp[j] = emp[j + 1];
+                empArray[j] = empArray[j + 1];
             }
             cout << "Name Deleted Successfully #";
-            // decrement number of emp in system .
+            // decrement number of empArray in system .
             totalEnteredEmp--;
-			enteredEmp = totalEnteredEmp;
+            enteredEmp = totalEnteredEmp;
 
+            getch();
+            break;
+        }
+    }
+    if (isFound == 0)
+    {
+        cout << "Name is not Exist !! ";
+        getch();
+    }
+}
+
+// delete with id functionality .
+void showDeleteWithIdPage()
+{
+    int id;
+    gotoxy(15, 14);
+    int isFound = 0;
+    cout << "enter the id you want to delete : ";
+    cin >> id;
+    cout << endl;
+    for (int i = 0; i < sizeOfEmpArray; i++)
+    {
+        if (id == empArray[i].id)
+        {
+            isFound = 1;
+            for (int j = i; j <= sizeOfEmpArray - 1; j++)
+            {
+                empArray[j] = empArray[j + 1];
+            }
+            cout << "Employee with id" << id << "Deleted Successfully #";
+            // decrement number of empArray in system .
+            totalEnteredEmp--;
+            enteredEmp = totalEnteredEmp;
             getch();
             break;
         }
@@ -283,7 +354,7 @@ void showDeletePage()
     else if (c == 'i' || c == 'I')
     {
         gotoxy(15, 14);
-        cout << "user want to delete with id #";
+        showDeleteWithIdPage();
         getch();
     }
     else
@@ -294,10 +365,6 @@ void showDeletePage()
         getch();
         showDeletePage();
     }
-}
-
-void showDeleteWithIdPage()
-{
 }
 
 /**
@@ -315,15 +382,15 @@ void showDisplayPanel()
             gotoxy(28, y);
             printf("EMP Number %d", i + 1);
             gotoxy(28, y + 2);
-            printf("Enter emp Name : %s", emp[i].name);
+            printf("Enter emp Name : %s", empArray[i].name);
             gotoxy(28, y + 4);
-            printf("Enter emp ID : %d", emp[i].id);
+            printf("Enter emp ID : %d", empArray[i].id);
             gotoxy(28, y + 6);
-            printf("Emp Salary : %d", emp[i].salary);
+            printf("Emp Salary : %d", empArray[i].salary);
             gotoxy(28, y + 8);
-            printf("Emp Bouns : %d", emp[i].bouns);
+            printf("Emp Bouns : %d", empArray[i].bouns);
             gotoxy(28, y + 10);
-            printf("Emp Deduct : %d", emp[i].deduct);
+            printf("Emp Deduct : %d", empArray[i].deduct);
             getch();
             clrscr();
         }
@@ -375,7 +442,7 @@ void handleUserInputInMenu()
         }
         else if (selectedOption == 5)
         {
-            free(emp);
+            free(empArray);
             exit(0);
         }
         break;
@@ -390,10 +457,10 @@ void main()
 {
     int app_running = 1;
     clrscr();
-    // ask for the size of emp array you want to allocate .
+    // ask for the size of empArray array you want to allocate .
     cout << "Before starting the program , enter the number of the EMP's : ";
     cin >> sizeOfEmpArray;
-    emp = new Employee[sizeOfEmpArray];
+    empArray = new Employee[sizeOfEmpArray];
     while (app_running)
     {
         showMenu();
